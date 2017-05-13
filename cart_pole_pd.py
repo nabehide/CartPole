@@ -25,6 +25,7 @@ env = gym.make('CartPole-v0') # 環境作成
 # 指定のディレクトリにビデオを保存する環境のラップクラス
 # force=True：以前のモニタファイルを自動的にクリア
 env = wrappers.Monitor(env, video_path, force=True)
+
 for i_episode in range(n_episode):
     observation = env.reset() # 環境初期化＆初期観察取得
     for t in range(n_step):
@@ -33,8 +34,8 @@ for i_episode in range(n_episode):
         action = myagent.action(observation) # エージェントクラスから行動を取得
 
         # change the magnitude of force
-        env.env.force_mag = action
-        print("force_mag", env.env.force_mag)
+        env.env.env.force_mag = action
+        print("force_mag", env.env.env.force_mag)
 
         # 'action' is always 1
         # because 'force_mag' can be a negative value.
