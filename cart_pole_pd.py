@@ -17,8 +17,8 @@ n_episode = 1 # エピソード数
 n_step = 200 # ステップ数
 # PD制御パラメータ(ちなみP制御だけだと上手く行かない)
 # ※正負でクラップしているので、比しか意味ない
-kp = 0.1
-kd = 0.01
+kp = 40
+kd = 5
 
 myagent = agents.PDAgent(kp, kd) # 正負でクラップしたPD制御のエージェント
 env = gym.make('CartPole-v0') # 環境作成
@@ -31,7 +31,15 @@ for i_episode in range(n_episode):
         env.render() # 環境を表示(でもMonitorを使うとなくても表示される)
         print(observation)
         action = myagent.action(observation) # エージェントクラスから行動を取得
-        observation, reward, done, info = env.step(action) # １ステップ進める
+
+        # change the magnitude of force
+        env.env.force_mag = action
+        print("force_mag", env.env.force_mag)
+
+        # 'action' is always 1
+        # because 'force_mag' can be a negative value.
+        observation, reward, done, info = env.step(1)
+        # observation, reward, done, info = env.step(action) # １ステップ進める
         if done: # 終了フラグ
             print('Episode finished after {} timesteps'.format(t+1))
             break
